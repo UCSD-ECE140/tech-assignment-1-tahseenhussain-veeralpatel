@@ -1,0 +1,162 @@
+/* ECE 17 Programming Assignment 1
+ *
+ * Author: Tahseen Hussain
+ * Date: 4/6/2024
+ */
+
+#include <iostream>
+
+#include <string>
+#include "helpers.h"
+//using namespace std;
+
+
+
+
+int main() {
+
+    // Variable declarations - all indices are set to 0 upon startup
+    // Using 0 based indexing throughout
+//--------------------------------------------------------------------------------//
+    const int dataLength = 5;
+    float examScore[dataLength];
+    float paScore[dataLength];
+
+    const int debugging = 1; // 1 for pre-made list, 0 for user inputted list
+
+    std::cout << "\n\n\n";
+    // Ask for exam scores from user and store inputs into array
+    // Ask for PA scores from user and store inputs into array
+
+
+    if (debugging == 0) { // Ask TA how to remove per instance of warning annoying
+
+
+        for (int i = 0; i < dataLength; i++) {
+            std::cout << "Enter score for exam #" << i << ":" << std::endl;
+            std::cin >> examScore[i];
+        }
+
+        for (int i = 0; i < dataLength; i++) {
+            std::cout << "Enter score for PA # " << i << std::endl;
+            std::cin >> paScore[i];
+        }
+
+    }
+    else {
+        // Assign values to examScore and paScore arrays
+        float preMadeExamScores[dataLength] = {10.3, 20, 1.3, 40, 50};
+        float preMadePaScores[dataLength] = {10, 20.5, 30, 90, 500};
+
+        for (int i = 0; i < dataLength; i++) {
+            examScore[i] = preMadeExamScores[i];
+            paScore[i] = preMadePaScores[i];
+        }
+    }
+
+
+    // Print out the scores, data types, and length for debugging
+    if (debugging == 1) {
+
+        std::cout << "Score array information\n-----------------------------------" << std::endl;
+        std::cout << "Exam scores are: ";
+        for (float i: examScore) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "PA scores are: ";
+        for (float i: paScore) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "Exam Score Size : " << sizeof(examScore) << " bytes" << std::endl;
+        std::cout << "PA Score Size : " << sizeof(paScore) << " bytes" << std::endl;
+
+        std::cout << "----------------------------------- " << std::endl;
+        // Expected size be 40 for each  - add in check statement
+
+        std::cout << "Array Average information\n-----------------------------------" << std::endl;
+        float examAvg = categoryTotal(examScore, dataLength);
+        float paAvg = categoryTotal(paScore, dataLength);
+        std::cout << "Exam Score avg : " << examAvg << std::endl;
+        std::cout << "PA Score avg : " << paAvg << std::endl;
+
+        std::cout << "-----------------------------------" << std::endl;
+
+    }
+
+
+
+//--------------------------------------------------------------------------------//
+
+    // Calculate grade using Method 1
+    float M1grade = gradeCalcM1(examScore, dataLength, paScore, dataLength);
+    std::cout << "M1 grade: " << M1grade << std::endl;
+    std::cout << "-----------------------------------" << std::endl;
+
+//--------------------------------------------------------------------------------//
+
+    // Calculate grade using Method 2
+    float M2grade = gradeCalcM2(examScore, dataLength, paScore, dataLength);
+    std::cout << "M2 grade: " << M2grade << std::endl;
+    std::cout << "-----------------------------------" << std::endl;
+
+//--------------------------------------------------------------------------------//
+
+    // Determine which score is higher and calculate letter grade accordingly
+    // Way to do both in one line using a ternary operator? and statement wasnt working
+    char grade = M1grade > M2grade ? letterGrade(M1grade) : letterGrade(M2grade);
+    std::cout << (M1grade > M2grade ? "M1 chosen" : "M2 chosen") << std::endl;
+    std::cout << "Final letter: " << grade << std::endl;
+    std::cout << "-----------------------------------" << std::endl;
+
+
+//--------------------------------------------------------------------------------//
+    // replaceSubstring
+    std::string string1 = "a cat a silly a in a hat";
+    std::string string2 = " a ";
+    std::string string3 = " that ";
+    replaceSubstring(string1, string2, string3);
+
+
+
+
+
+    return 0;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void dataAssignment(double arr) {
+    // Was going to use for data assignment per array but OMG i dont remember
+    // how to currently handle the pointer references or template calls :C
+    // oh well
+    // Ask TA's how to remove spell checker for comments
+
+
+}
+
+void errorReading(int arg1) { 
+    /*
+        Debugging function
+    */
+   
+
+
+}
