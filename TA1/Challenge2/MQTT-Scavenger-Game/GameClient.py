@@ -60,7 +60,7 @@ def on_message(client, userdata, msg):
         :param userdata: userdata is set when initiating the client, here it is userdata=None
         :param msg: the message with topic and payload
     """
-    print("message: " + msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
+    print("\n\nMessage Received: " + msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
     topic_list = msg.topic.split("/")
 
     # Validate it is input we can deal with

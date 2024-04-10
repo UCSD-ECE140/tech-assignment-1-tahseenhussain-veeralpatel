@@ -3,6 +3,7 @@ import paho.mqtt.client as paho
 from paho import mqtt
 
 class MQttClient: 
+    
     def __init__(self, client_id="", userdata=None, protocol=paho.MQTTv5):
         """
         Initializes the MQTT Client with necessary callbacks and settings.
@@ -10,6 +11,8 @@ class MQttClient:
         self.client = paho.Client(callback_api_version=paho.CallbackAPIVersion.VERSION1, client_id=client_id, userdata=userdata, protocol=protocol)
         self.setup_callbacks()
         self.received_messages = []
+        
+        
     def setup_callbacks(self):
         """
         Sets up the callback methods for the MQTT client.

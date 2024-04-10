@@ -53,8 +53,9 @@ def on_message(client, userdata, msg):
         :param userdata: userdata is set when initiating the client, here it is userdata=None
         :param msg: the message with topic and payload
     """
-
-    print("message: " + msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
+    print("\n\n - Player Client received message - \n\n")
+    print("Message: " + msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
+    mv = None
     user_move = input("Enter a move: \n ")
 
     if user_move == "W":
@@ -66,9 +67,18 @@ def on_message(client, userdata, msg):
     elif user_move == "D":
         mv = "RIGHT"
     if mv != None:
-        client.publish(f"games/{lobby_name}/{player_1}/move", mv)
-
-
+        print(f" - Move {mv} was published - \n")
+        client.publish(f"games/{lobby_name}/{player_1}/move", mv, 2)
+        time.sleep(0.5)
+    #coinCount = coinCounter(msg)
+    
+def coinCounter(msg) -> list: 
+    received_messages = [msg.payload.decode()]
+    print(f"\n\nThis is the decoded message: \n\n {type(received_messages)}")
+    print(f"\n\nCoin1 coin count: {type(received_messages[0])}\n\n")
+    
+    
+    
 
 if __name__ == '__main__':
     load_dotenv(dotenv_path='./credentials.env')
@@ -111,9 +121,17 @@ if __name__ == '__main__':
     time.sleep(1) # Wait a second to resolve game start
     client.publish(f"games/{lobby_name}/start", "START")
     user_move = input("Enter a move: \n ")
-    mv = "UP"
-
-    
-    client.publish(f"games/{lobby_name}/{player_1}/move", mv)
+    mv = None
+    if user_move == "W":
+        mv = "UP"
+    elif user_move == "S":
+        mv = "DOWN"
+    elif user_move == "A":
+        mv = "LEFT"
+    elif user_move == "D":
+        mv = "RIGHT"
+    if mv != None:
+        print(f" - Move {mv} was published - \n")
+        client.publish(f"games/{lobby_name}/{player_1}/move", mv, 2)
 
     client.loop_forever()

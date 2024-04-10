@@ -7,7 +7,10 @@ from player import Player
 import random
 from gameItems import *
 from typing import Optional
-
+YELLOW = '\033[93m'
+BLUE = '\033[94m'
+GREEN = '\033[92m'
+ENDC = '\033[0m'
 def getDefaultWallChoices():
     wall = []
     for row in range(1,9):
@@ -67,14 +70,14 @@ class Map:
                 if cell is None:
                     cellName = 'None'
                 elif isinstance(cell, Player):
-                    cellName = cell.name
-                else:
-                    cellName = cell.__class__.__name__
+                    cellName = YELLOW + cell.name + ENDC  # Yellow for Player
+                elif isinstance(cell, Wall):
+                    cellName = BLUE + 'Wall' + ENDC  # Blue for Wall
+                elif isinstance(cell, (Coin1, Coin2, Coin3)):
+                    cellName = GREEN + cell.__class__.__name__ + ENDC  # Green for Coins
                 row_str.append(cellName)
             result.append('\t'.join(row_str))
-
         output = '\n'.join(result)
-
         return output
 
     def set(self, loc: tuple[int, int], item: object):

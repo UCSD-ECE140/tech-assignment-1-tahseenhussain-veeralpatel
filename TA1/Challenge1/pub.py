@@ -16,6 +16,8 @@ if __name__ == "__main__":
 
 
     cl2.connect(url)
+    
+    
     while True:
         rand1 = random.randint(-100, -1)
         rand2 = random.randint(1, 9999)
