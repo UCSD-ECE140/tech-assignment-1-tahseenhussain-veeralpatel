@@ -110,7 +110,7 @@ if __name__ == '__main__':
     print("\n\n\n")
     client.subscribe(f"games/{lobby_name}/lobby")
     client.subscribe(f'games/{lobby_name}/+/game_state')
-    client.subscribe(f'games/{lobby_name}/scores')
+    #client.subscribe(f'games/{lobby_name}/scores')
 
     client.publish("new_game", json.dumps({'lobby_name':lobby_name,
                                             'team_name':'ATeam',

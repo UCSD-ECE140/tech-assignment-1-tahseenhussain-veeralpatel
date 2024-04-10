@@ -55,27 +55,32 @@ def on_message(client, userdata, msg):
         :param userdata: userdata is set when initiating the client, here it is userdata=None
         :param msg: the message with topic and payload
     """
+    print("------------------------------------------------------------------------------------")
 
-    print("message: " + msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
+    print("\nmessage: " + msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
     
     
     # OKAY need to skip the games/TestLobby/scores message when its sent 
     playerIDX = search(msg.topic)
+    
+    chosenPlayer = players[playerIDX]
+
+    print(f"Found: {chosenPlayer}\n")
+
     # OKAY FOUND ISSUE SOMETIMES IS PUBLISHES TO WRONG THING AND BREAKS LOOP
     # maybe just  
     
-    if playerIDX:
-        user_move = input("\n\n\nEnter to iteratate next move : \n ")
-        chosenPlayer = players[playerIDX]
+    #if playerIDX:
+    #user_move = input("\nEnter to iteratate next move...\n")
 
-        print(f"chosenPlayer to publish: {chosenPlayer}")
-        
-        cmd = pathPlanning(msg.payload, chosenPlayer)
-        time.sleep(2)
-        client.publish(f"games/{lobby_name}/{chosenPlayer}/move", cmd)
-    else: 
-        print("\n\nDifferent message type sent - attempting to skip...")
-        print(f"{msg.topic}")
+    
+    cmd = pathPlanning(msg.payload, chosenPlayer)
+    time.sleep(1)
+    client.publish(f"games/{lobby_name}/{chosenPlayer}/move", cmd)
+    print("------------------------------------------------------------------------------------")
+#else: 
+    #    print("\n\nDifferent message type sent - attempting to skip...")
+    #    print(f"{msg.topic}")
         #client.publish(f"games/{lobby_name}/Player4/move", "RIGHT")
 
 def is_substring_present(substring, string):
@@ -141,8 +146,8 @@ def pathPlanning(payload, chosenPlayer) -> str:
     
     allCoins = parsed_data['coin1'] + parsed_data['coin2'] +  parsed_data['coin3']
     wallLoc.append(wall_positions)
-    wallLoc.append(parsed_data["teammatePositions"])
-    wallLoc.append(parsed_data["enemyPositions"])
+    #wallLoc.append(parsed_data["teammatePositions"])
+    #wallLoc.append(parsed_data["enemyPositions"])
     print(f"Wall & player locations: {wallLoc}")
     # uhhh mid, implemented wrong, switch it up 
     #move_position, move_description = bfs(grid_size, current_position, allCoins, wallLoc, vision_range)
@@ -209,8 +214,10 @@ def coinFinder(cPos, allCoins):
 def edge(cPos, wallLoc):
     if is_at_edge(cPos[0], cPos[1], 9):
         # do rotate 
+        #newX, newY = cPos[0] + direction[0], cPos[1] + direction[1]
         print("is at edge, rotate")
-        return rotate(cPos[0], cPos[1])
+        
+        return rotateCCw(cPos[0], cPos[1])
     else:
         # go towards edge 
         print("approaching edge")
@@ -218,19 +225,37 @@ def edge(cPos, wallLoc):
         target = border[borderIdx]
         print(f"edge target: {target}")
         targetCoords = move_towards_target(cPos, target, wallLoc)
+        
         return comm_Move(targetCoords, cPos)
-def rotate(x,y):
-    if x == 0:
+def rotateCCw(x,y):
+    
+    if x == 0 and y > 0:
         return "LEFT"
-    elif x == 9:
+    elif x == 9 and y < 9:
         return "RIGHT"
-    elif y == 0:
+    elif y == 0 and x >= 0:
         return "DOWN"
-    elif y== 9:
+    elif y == 9 and x > 0:
         return "UP"
     else: 
         return "INCORRECT VALUE - THROW ERROR NOW"
-
+    
+    # okay okay, change it so that the target INSTEAD of CCW rotation, is to default to CCW direction, but always checking target 
+    # block in front of itself
+    # 
+def rotateCw(x,y):
+    
+    if x == 0 and y < 9:
+        return "RIGHT"
+    elif x == 9 and y > 0:
+        return "LEFT"
+    elif y == 0 and x <= 9:
+        return "UP"
+    elif y== 9 and x > 0:
+        return "DOWN"
+    else: 
+        return "INCORRECT VALUE - THROW ERROR NOW"
+    
 def comm_Move(nextComm, cPos):
     # translate nextComm (4,4) into command based on currentPosition (3,4) for exampel
     if (nextComm[0] > cPos[0]):
@@ -292,6 +317,10 @@ def move_towards_target(current_position, target_position, walls):
 
     # move closest to the target and not blocked by a wall
     return potential_moves[0] if potential_moves else current_position #<- should always be a path so should never happen the if but error checking 
+
+def onlyWalls(position, walls, direction):
+    wallPres = any(list(position) in sublist for sublist in walls)
+    return wallPres
 
 def is_wall_border(position, walls, direction):
     x = any(list(position) in sublist for sublist in walls)
@@ -423,7 +452,7 @@ if __name__ == '__main__':
     print("\n\n\n")
     client.subscribe(f"games/{lobby_name}/lobby")
     client.subscribe(f'games/{lobby_name}/+/game_state')
-    client.subscribe(f'games/{lobby_name}/scores')
+    #client.subscribe(f'games/{lobby_name}/scores')
 
     client.publish("new_game", json.dumps({'lobby_name':lobby_name,
                                             'team_name':'ATeam',

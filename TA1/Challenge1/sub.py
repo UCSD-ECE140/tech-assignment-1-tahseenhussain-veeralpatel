@@ -34,7 +34,7 @@ def update_graph(received_messages, ax1, ax2, y_values_0, y_values_1, last_vals)
     
 if __name__ == "__main__":
         
-    url = "3983dc79b8c948ff9f164e0f0d0cf8f8.s1.eu.hivemq.cloud"
+    url = "8ae73aecca8b42aba3a5f1c678529a93.s1.eu.hivemq.cloud"
     
     rcv = MQttClient()
     

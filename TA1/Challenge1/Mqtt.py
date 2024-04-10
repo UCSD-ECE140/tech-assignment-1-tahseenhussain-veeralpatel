@@ -86,7 +86,7 @@ class MQttClient:
         Connects the client to the MQTT broker.
         """
         self.client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
-        self.client.username_pw_set(username="ECE140B", password="potato123P")
+        self.client.username_pw_set(username="140BECE", password="apple123BB")
         self.client.connect(url, port)
 
 

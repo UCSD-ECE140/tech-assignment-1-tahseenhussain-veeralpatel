@@ -7,7 +7,7 @@ from Mqtt import MQttClient
   
 if __name__ == "__main__":
         
-    url = "3983dc79b8c948ff9f164e0f0d0cf8f8.s1.eu.hivemq.cloud"
+    url = "8ae73aecca8b42aba3a5f1c678529a93.s1.eu.hivemq.cloud"
     
     cl1 = MQttClient()
     cl2 = MQttClient()
